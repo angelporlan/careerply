@@ -2,6 +2,7 @@ import { Send, Calendar, PartyPopper } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import RecentUpdateItem from "@/components/dashboard/RecentUpdateItem";
 import SearchInput from "@/components/SearchInput";
+import ActionButton from "@/components/ActionButton";
 
 export default function DashboardPage() {
   return (
@@ -23,10 +24,11 @@ export default function DashboardPage() {
         </div>
         
         {/* Botón con Signature Texture (Gradient + Shadow) */}
-        <button className="bg-primary-gradient hover:brightness-110 text-white px-10 py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-2xl shadow-primary/20 active:scale-95">
-          <span className="text-2xl font-light">+</span> 
-          <span className="text-sm tracking-wide">Add New Application</span>
-        </button>
+        <ActionButton 
+          label="Add New Application" 
+          showPlus={true} 
+          href="/applications/new"
+        />
       </div>
 
       <div className="grid grid-cols-12 gap-10">

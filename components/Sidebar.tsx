@@ -14,9 +14,16 @@ import {
 export default function Sidebar() {
   const pathname = usePathname();
 
-  // Función para reutilizar los estilos de los enlaces
+  // Función mejorada para detectar si la ruta es activa o hija de una activa
+  const isPathActive = (path: string) => {
+    // Si estamos en la raíz del dashboard, comparación exacta
+    if (path === '/dashboard') return pathname === '/dashboard';
+    // Para el resto, si la ruta actual empieza con el path del link, está activo
+    return pathname.startsWith(path);
+  };
+
   const getLinkStyles = (path: string) => {
-    const isActive = pathname === path;
+    const isActive = isPathActive(path);
     return `flex items-center gap-4 px-4 py-3 rounded-md font-semibold relative transition-all group
       ${isActive 
         ? 'text-primary bg-surface-container-lowest shadow-sm shadow-on-surface/5' 
@@ -43,16 +50,16 @@ export default function Sidebar() {
         <Link href="/dashboard" className={getLinkStyles('/dashboard')}>
           <LayoutGrid className="w-5 h-5" />
           <span className="text-sm">Dashboard</span>
-          {pathname === '/dashboard' && (
+          {isPathActive('/dashboard') && (
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
           )}
         </Link>
 
-        {/* Applications */}
+        {/* Applications (Se mantendrá activo en /applications/new, etc.) */}
         <Link href="/applications" className={getLinkStyles('/applications')}>
           <Briefcase className="w-5 h-5" />
           <span className="text-sm">Applications</span>
-          {pathname === '/applications' && (
+          {isPathActive('/applications') && (
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
           )}
         </Link>
@@ -61,7 +68,7 @@ export default function Sidebar() {
         <Link href="/cv-library" className={getLinkStyles('/cv-library')}>
           <FileText className="w-5 h-5" />
           <span className="text-sm">CV Library</span>
-          {pathname === '/cv-library' && (
+          {isPathActive('/cv-library') && (
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
           )}
         </Link>
@@ -70,7 +77,7 @@ export default function Sidebar() {
         <Link href="/settings" className={getLinkStyles('/settings')}>
           <Settings className="w-5 h-5" />
           <span className="text-sm">Settings</span>
-          {pathname === '/settings' && (
+          {isPathActive('/settings') && (
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
           )}
         </Link>
@@ -94,7 +101,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Tarjeta de Perfil de Usuario */}
+        {/* Tarjeta de Perfil */}
         <div className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-2xl shadow-sm border-none">
           <div className="w-10 h-10 rounded-xl bg-on-surface flex items-center justify-center text-surface-bright font-bold text-sm shrink-0">
             AS

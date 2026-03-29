@@ -4,6 +4,7 @@ import ApplicationRow from "@/components/applications/ApplicationRow";
 import EfficiencyCard from "@/components/applications/EfficiencyCard";
 import PromoBanner from "@/components/applications/PromoBanner";
 import { CalendarDays } from "lucide-react";
+import ActionButton from "@/components/ActionButton";
 
 export default function ApplicationsPage() {
   return (
@@ -31,10 +32,11 @@ export default function ApplicationsPage() {
               Last 30 Days
             </button>
           </div>
-          <button className="bg-primary-gradient text-white px-10 py-5 rounded-2xl font-bold flex items-center gap-3 shadow-2xl shadow-primary/20 hover:brightness-110 transition-all cursor-pointer">
-            <span className="text-2xl font-light">+</span> 
-            <span className="text-sm tracking-wide">New Application</span>
-          </button>
+        <ActionButton 
+          label="Add New Application" 
+          showPlus={true} 
+          href="/applications/new"
+        />
         </div>
       </div>
 
