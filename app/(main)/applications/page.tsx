@@ -16,7 +16,7 @@ export default function ApplicationsPage() {
       {/* 2. Header & Filters */}
       <div className="flex justify-between items-start mb-12">
         <div>
-          <h1 className="text-6xl font-extrabold text-on-surface tracking-tightest mb-4">
+          <h1 className="text-5xl font-extrabold text-on-surface tracking-tightest mb-4">
             Applications
           </h1>
           <p className="text-on-surface/50 font-medium text-lg">
