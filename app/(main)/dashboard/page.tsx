@@ -1,22 +1,15 @@
-import { Search, Send, Calendar, PartyPopper } from "lucide-react";
+import { Send, Calendar, PartyPopper } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import RecentUpdateItem from "@/components/dashboard/RecentUpdateItem";
+import SearchInput from "@/components/SearchInput";
 
 export default function DashboardPage() {
   return (
     /* Surface: fondo base de la app */
-    <div className="p-10 max-w-[1440px] mx-auto bg-surface-container-low min-h-screen">
+    <div className="p-10 max-w-360 mx-auto bg-surface min-h-screen">
       
-      {/* 1. Buscador Superior (Estilo sunken/hundido) */}
-      <div className="relative mb-16 max-w-xl group">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface/30 w-5 h-5 transition-colors group-focus-within:text-primary" />
-        <input 
-          type="text" 
-          placeholder="Search applications, companies, or roles..." 
-          className="w-full pl-12 pr-4 py-4 rounded-xl bg-surface-container-low border-none text-sm text-on-surface placeholder:text-on-surface/30 focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-inner"
-        />
-      </div>
-
+      <SearchInput />
+    
       {/* 2. Header (Embrace Asymmetry) */}
       <div className="flex justify-between items-end mb-12">
         <div>
@@ -63,7 +56,7 @@ export default function DashboardPage() {
           </div>
           
           {/* Activity Chart Container (Surface Container Low) */}
-          <div className="bg-surface-container-low rounded-4xl p-10 h-[450px] relative overflow-hidden shadow-sm">
+          <div className="bg-surface-container-low rounded-4xl p-10 h-112.5 relative overflow-hidden shadow-sm">
              <div className="flex justify-between items-center mb-8">
                 <h3 className="font-bold text-on-surface text-xl tracking-tight">Weekly Activity</h3>
                 <div className="flex gap-4 items-center">

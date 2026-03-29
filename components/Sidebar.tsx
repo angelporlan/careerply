@@ -1,4 +1,7 @@
+"use client";
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   LayoutGrid, 
   Briefcase, 
@@ -9,10 +12,21 @@ import {
 } from 'lucide-react';
 
 export default function Sidebar() {
+  const pathname = usePathname();
+
+  // Función para reutilizar los estilos de los enlaces
+  const getLinkStyles = (path: string) => {
+    const isActive = pathname === path;
+    return `flex items-center gap-4 px-4 py-3 rounded-md font-semibold relative transition-all group
+      ${isActive 
+        ? 'text-primary bg-surface-container-lowest shadow-sm shadow-on-surface/5' 
+        : 'text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high'}`;
+  };
+
   return (
-    <aside className="w-70 h-screen flex flex-col bg-surface px-6 py-8 sticky top-0 border-none">
+    <aside className="w-[280px] h-screen flex flex-col bg-surface-container-low px-6 py-8 sticky top-0 border-none shrink-0">
       
-      {/* Header / Logo - Siguiendo "Editorial Authority" */}
+      {/* Header / Logo */}
       <div className="mb-12">
         <h1 className="text-2xl font-extrabold text-on-surface tracking-tightest">
           The Curator
@@ -24,40 +38,41 @@ export default function Sidebar() {
 
       {/* Navegación Principal */}
       <nav className="flex-1 space-y-2 relative">
-        {/* Item Activo - Usando Surface Hierarchy */}
-        <Link 
-          href="/dashboard" 
-          className="flex items-center gap-4 px-4 py-3 text-primary bg-surface-container-lowest rounded-md font-semibold relative shadow-sm shadow-on-surface/5"
-        >
+        
+        {/* Dashboard */}
+        <Link href="/dashboard" className={getLinkStyles('/dashboard')}>
           <LayoutGrid className="w-5 h-5" />
           <span className="text-sm">Dashboard</span>
-          {/* Indicador sutil lateral sin ser una línea agresiva */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
+          {pathname === '/dashboard' && (
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
+          )}
         </Link>
 
-        {/* Items Inactivos - Usando On-Surface con Opacidad */}
-        <Link 
-          href="/applications" 
-          className="flex items-center gap-4 px-4 py-3 text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high rounded-md transition-all group"
-        >
-          <Briefcase className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="text-sm font-medium">Applications</span>
+        {/* Applications */}
+        <Link href="/applications" className={getLinkStyles('/applications')}>
+          <Briefcase className="w-5 h-5" />
+          <span className="text-sm">Applications</span>
+          {pathname === '/applications' && (
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
+          )}
         </Link>
 
-        <Link 
-          href="/cv-library" 
-          className="flex items-center gap-4 px-4 py-3 text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high rounded-md transition-all group"
-        >
-          <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="text-sm font-medium">CV Library</span>
+        {/* CV Library */}
+        <Link href="/cv-library" className={getLinkStyles('/cv-library')}>
+          <FileText className="w-5 h-5" />
+          <span className="text-sm">CV Library</span>
+          {pathname === '/cv-library' && (
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
+          )}
         </Link>
 
-        <Link 
-          href="/settings" 
-          className="flex items-center gap-4 px-4 py-3 text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high rounded-md transition-all group"
-        >
-          <Settings className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="text-sm font-medium">Settings</span>
+        {/* Settings */}
+        <Link href="/settings" className={getLinkStyles('/settings')}>
+          <Settings className="w-5 h-5" />
+          <span className="text-sm">Settings</span>
+          {pathname === '/settings' && (
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full"></div>
+          )}
         </Link>
       </nav>
 
@@ -72,14 +87,14 @@ export default function Sidebar() {
             <span className="text-xs font-medium uppercase tracking-widest">Help</span>
           </Link>
           <button 
-            className="flex items-center gap-4 px-4 py-2 text-on-surface/50 hover:text-status-rejected-text transition-colors w-full text-left"
+            className="flex items-center gap-4 px-4 py-2 text-on-surface/50 hover:text-status-rejected-text transition-colors w-full text-left cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span className="text-xs font-medium uppercase tracking-widest">Sign Out</span>
           </button>
         </div>
 
-        {/* Tarjeta de Perfil - Estilo "Sheet of Fine Paper" */}
+        {/* Tarjeta de Perfil de Usuario */}
         <div className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-2xl shadow-sm border-none">
           <div className="w-10 h-10 rounded-xl bg-on-surface flex items-center justify-center text-surface-bright font-bold text-sm shrink-0">
             AS
