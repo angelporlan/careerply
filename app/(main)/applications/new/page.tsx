@@ -6,6 +6,7 @@ import InfoCard from "@/components/applications/new/InfoCard";
 import { Link, Lightbulb, Info } from "lucide-react";
 import FormSelect from "@/components/applications/new/FormSelect";
 import FormTextArea from "@/components/applications/new/FormTextArea";
+import ActionButton from "@/components/ActionButton";
 
 export default function NewApplicationPage() {
     return (
@@ -60,13 +61,18 @@ export default function NewApplicationPage() {
                             />
                         </div>
 
-                        <div className="flex justify-end items-center gap-6 pt-6">
-                            <button type="button" className="text-on-surface/40 font-bold text-sm hover:text-on-surface transition-colors cursor-pointer">
-                                Cancel
-                            </button>
-                            <button type="submit" className="bg-primary-gradient text-white px-10 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:brightness-110 transition-all cursor-pointer">
-                                Save Application
-                            </button>
+                        <div className="flex justify-end items-center pt-6">
+                            <ActionButton
+                                label="Cancel"
+                                variant="ghost"
+                                href="/applications"
+                            />
+
+                            <ActionButton
+                                label="Save Application"
+                                type="submit"
+                            />
+
                         </div>
                     </form>
                 </div>
