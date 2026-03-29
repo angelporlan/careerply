@@ -4,64 +4,116 @@ import RecentUpdateItem from "@/components/dashboard/RecentUpdateItem";
 
 export default function DashboardPage() {
   return (
-    <div className="p-10 max-w-[1400px] mx-auto">
-      {/* 1. Buscador Superior */}
-      <div className="relative mb-12 max-w-xl">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+    /* Surface: fondo base de la app */
+    <div className="p-10 max-w-[1440px] mx-auto bg-surface-container-low min-h-screen">
+      
+      {/* 1. Buscador Superior (Estilo sunken/hundido) */}
+      <div className="relative mb-16 max-w-xl group">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface/30 w-5 h-5 transition-colors group-focus-within:text-primary" />
         <input 
           type="text" 
           placeholder="Search applications, companies, or roles..." 
-          className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border-none shadow-sm text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+          className="w-full pl-12 pr-4 py-4 rounded-xl bg-surface-container-low border-none text-sm text-on-surface placeholder:text-on-surface/30 focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-inner"
         />
       </div>
 
-      {/* 2. Header */}
-      <div className="flex justify-between items-end mb-10">
+      {/* 2. Header (Embrace Asymmetry) */}
+      <div className="flex justify-between items-end mb-12">
         <div>
-          <h1 className="text-4xl font-extrabold text-[#1a365d] mb-2">Workspace Dashboard</h1>
-          <p className="text-gray-500 font-medium">Welcome back, Alex. Your career journey is looking promising today.</p>
+          {/* Display-LG con tracking tightest */}
+          <h1 className="text-5xl font-extrabold text-on-surface tracking-tightest mb-3">
+            Workspace Dashboard
+          </h1>
+          <p className="text-on-surface/50 font-medium text-lg">
+            Welcome back, Alex. Your career journey is looking promising today.
+          </p>
         </div>
-        <button className="bg-[#0052cc] hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-blue-200">
-          <span className="text-xl">+</span> Add New Application
+        
+        {/* Botón con Signature Texture (Gradient + Shadow) */}
+        <button className="bg-primary-gradient hover:brightness-110 text-white px-10 py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-2xl shadow-primary/20 active:scale-95">
+          <span className="text-2xl font-light">+</span> 
+          <span className="text-sm tracking-wide">Add New Application</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-12 gap-8">
-        {/* LADO IZQUIERDO (Estadísticas y Gráfico) */}
-        <div className="col-span-8 space-y-8">
-          <div className="grid grid-cols-3 gap-6">
-            <StatCard icon={Send} label="Total Applications" value="42" badgeText="MONTH: +12%" />
-            <StatCard icon={Calendar} label="Pending Interviews" value="05" badgeText="ACTIVE" />
-            <StatCard icon={PartyPopper} label="Offers Received" value="02" badgeText="WINS" badgeColor="bg-purple-50 text-purple-600" />
+      <div className="grid grid-cols-12 gap-10">
+        
+        {/* LADO IZQUIERDO: Estadísticas y Actividad */}
+        <div className="col-span-8 space-y-10">
+          <div className="grid grid-cols-3 gap-8">
+            <StatCard 
+              icon={Send} 
+              label="Total Applications" 
+              value="42" 
+              badgeText="MONTH: +12%" 
+            />
+            <StatCard 
+              icon={Calendar} 
+              label="Pending Interviews" 
+              value="05" 
+              badgeText="ACTIVE" 
+            />
+            <StatCard 
+              icon={PartyPopper} 
+              label="Offers Received" 
+              value="02" 
+              badgeText="WINS" 
+              badgeColor="bg-status-offer-bg text-status-offer-text" 
+            />
           </div>
           
-          {/* Aquí iría el ActivityChart (puedes poner un div temporal) */}
-          <div className="bg-white rounded-[2.5rem] p-8 h-[400px] shadow-sm border border-gray-50">
-             <h3 className="font-bold text-[#1a365d]">Weekly Activity</h3>
-             {/* Espacio para el gráfico */}
+          {/* Activity Chart Container (Surface Container Low) */}
+          <div className="bg-surface-container-low rounded-4xl p-10 h-[450px] relative overflow-hidden shadow-sm">
+             <div className="flex justify-between items-center mb-8">
+                <h3 className="font-bold text-on-surface text-xl tracking-tight">Weekly Activity</h3>
+                <div className="flex gap-4 items-center">
+                   <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-primary"></div>
+                      <span className="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Applications</span>
+                   </div>
+                </div>
+             </div>
+             {/* Aquí inyectaremos el gráfico de Recharts pronto */}
+             <div className="absolute inset-0 flex items-center justify-center text-on-surface/10 font-bold text-lg">
+                Chart Visualization Space
+             </div>
           </div>
         </div>
 
-        {/* LADO DERECHO (Recent Updates) */}
-        <div className="col-span-4 space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-bold text-[#1a365d]">Recent Updates</h3>
-            <button className="text-[11px] font-bold text-blue-600 tracking-widest uppercase">View All</button>
+        {/* LADO DERECHO: Recent Updates */}
+        <div className="col-span-4 space-y-8">
+          <div className="flex justify-between items-center px-2">
+            <h3 className="text-xl font-bold text-on-surface tracking-tight">Recent Updates</h3>
+            <button className="text-[10px] font-extrabold text-primary tracking-widest uppercase hover:underline underline-offset-4">
+               View All
+            </button>
           </div>
           
-          <div className="space-y-4">
-            <RecentUpdateItem company="Google" status="Interview" time="2 hours ago" iconBg="bg-teal-500" />
-            <RecentUpdateItem company="Stripe" status="Applied" time="Yesterday" iconBg="bg-indigo-600" />
-            <RecentUpdateItem company="Atlassian" status="Official Offer" time="3 days ago" iconBg="bg-slate-800" />
+          <div className="space-y-5">
+            <RecentUpdateItem company="Google" status="Interview" time="2 hours ago" iconBg="bg-[#4285F4]" />
+            <RecentUpdateItem company="Stripe" status="Applied" time="Yesterday" iconBg="bg-[#635BFF]" />
+            <RecentUpdateItem company="Atlassian" status="Official Offer" time="3 days ago" iconBg="bg-on-surface" />
           </div>
         </div>
       </div>
       
-      {/* 4. Banner Inferior */}
-      <div className="mt-8 bg-[#0052cc] rounded-[2.5rem] p-10 text-white relative overflow-hidden">
-         <span className="bg-blue-400/30 text-[10px] font-bold px-4 py-1.5 rounded-full tracking-widest uppercase">Upcoming Event</span>
-         <h2 className="text-3xl font-bold mt-4">Final Interview with Figma</h2>
-         {/* ... más detalles del evento */}
+      {/* 4. Upcoming Event Banner (The Glass & Gradient Rule) */}
+      <div className="mt-12 bg-primary-gradient rounded-4xl p-12 text-white relative overflow-hidden shadow-2xl shadow-primary/30">
+         {/* Decoración abstracta de fondo */}
+         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+         
+         <div className="relative z-10 flex justify-between items-center">
+            <div>
+               <span className="bg-white/20 backdrop-blur-md text-[10px] font-bold px-5 py-2 rounded-full tracking-widest uppercase border border-white/10">
+                  Upcoming Event
+               </span>
+               <h2 className="text-4xl font-extrabold mt-6 tracking-tightest">Final Interview with Figma</h2>
+               <p className="text-white/70 mt-2 font-medium">Design Systems Team • March 30, 2026 at 10:00 AM</p>
+            </div>
+            <button className="bg-white text-primary px-8 py-4 rounded-2xl font-bold hover:bg-surface transition-colors shadow-xl">
+               Prepare Notes
+            </button>
+         </div>
       </div>
     </div>
   );

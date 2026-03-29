@@ -10,7 +10,7 @@ import {
 
 export default function Sidebar() {
   return (
-    <aside className="w-[280px] h-screen flex flex-col bg-surface-container-low px-6 py-8 sticky top-0 border-none">
+    <aside className="w-[280px] h-screen flex flex-col bg-surface px-6 py-8 sticky top-0 border-none">
       
       {/* Header / Logo - Siguiendo "Editorial Authority" */}
       <div className="mb-12">
