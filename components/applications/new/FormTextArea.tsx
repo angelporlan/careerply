@@ -1,4 +1,5 @@
 interface FormTextAreaProps {
+  name: string;
   label: string;
   placeholder: string;
   rows?: number;
@@ -7,6 +8,7 @@ interface FormTextAreaProps {
 }
 
 export default function FormTextArea({ 
+  name,
   label, 
   placeholder, 
   rows = 4, 
@@ -19,6 +21,7 @@ export default function FormTextArea({
         {label}
       </label>
       <textarea 
+        name={name}
         rows={rows}
         value={value}
         placeholder={placeholder}

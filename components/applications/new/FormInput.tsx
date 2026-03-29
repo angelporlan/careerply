@@ -1,11 +1,12 @@
 interface FormInputProps {
+  name: string;
   label: string;
   placeholder: string;
   type?: string;
   icon?: React.ReactNode;
 }
 
-export default function FormInput({ label, placeholder, type = "text", icon }: FormInputProps) {
+export default function FormInput({ name, label, placeholder, type = "text", icon }: FormInputProps) {
   return (
     <div className="flex flex-col gap-2 w-full">
       <label className="text-[10px] font-extrabold text-on-surface/40 tracking-widest uppercase px-1">
@@ -18,6 +19,7 @@ export default function FormInput({ label, placeholder, type = "text", icon }: F
           </div>
         )}
         <input 
+          name={name}
           type={type}
           placeholder={placeholder}
           className={`

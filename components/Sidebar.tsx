@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOutAction } from '@/app/(auth)/actions';
 import { 
   LayoutGrid, 
   Briefcase, 
@@ -93,12 +94,15 @@ export default function Sidebar() {
             <HelpCircle className="w-4 h-4" />
             <span className="text-xs font-medium uppercase tracking-widest">Help</span>
           </Link>
-          <button 
-            className="flex items-center gap-4 px-4 py-2 text-on-surface/50 hover:text-status-rejected-text transition-colors w-full text-left cursor-pointer"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="text-xs font-medium uppercase tracking-widest">Sign Out</span>
-          </button>
+          <form action={signOutAction}>
+            <button 
+              type="submit"
+              className="flex items-center gap-4 px-4 py-2 text-on-surface/50 hover:text-status-rejected-text transition-colors w-full text-left cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="text-xs font-medium uppercase tracking-widest">Sign Out</span>
+            </button>
+          </form>
         </div>
 
         {/* Tarjeta de Perfil */}

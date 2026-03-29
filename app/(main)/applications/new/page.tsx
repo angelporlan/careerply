@@ -7,6 +7,7 @@ import { Link, Lightbulb, Info } from "lucide-react";
 import FormSelect from "@/components/applications/new/FormSelect";
 import FormTextArea from "@/components/applications/new/FormTextArea";
 import ActionButton from "@/components/ActionButton";
+import { createApplication } from "@/app/lib/actions";
 
 export default function NewApplicationPage() {
     return (
@@ -22,21 +23,23 @@ export default function NewApplicationPage() {
                 <div className="col-span-8 bg-surface-container-lowest rounded-4xl p-12 shadow-sm">
 
 
-                    <form className="space-y-8">
+                    <form action={createApplication} className="space-y-8">
                         <div className="grid grid-cols-2 gap-6">
-                            <FormInput label="Company Name" placeholder="e.g. Acme Corp" />
-                            <FormInput label="Job Title" placeholder="e.g. Senior Product Designer" />
+                            <FormInput name="company" label="Company Name" placeholder="e.g. Acme Corp" />
+                            <FormInput name="role" label="Job Title" placeholder="e.g. Senior Product Designer" />
                         </div>
 
                         <FormInput
+                            name="job_url"
                             label="Job URL/Link"
                             placeholder="https://linkedin.com/jobs/..."
                             icon={<Link className="w-4 h-4" />}
                         />
 
                         <div className="grid grid-cols-2 gap-6">
-                            <FormInput label="Application Date" placeholder="dd/mm/aaaa" type="date" />
+                            <FormInput name="date" label="Application Date" placeholder="dd/mm/aaaa" type="date" />
                             <FormSelect
+                                name="status"
                                 label="Status"
                                 defaultValue="sent"
                                 options={[
@@ -45,7 +48,6 @@ export default function NewApplicationPage() {
                                     { label: "Offer", value: "offer" },
                                     { label: "Rejected", value: "rejected" }
                                 ]}
-                                onChange={(val) => console.log("Nuevo estado:", val)}
                             />
                         </div>
 
@@ -54,10 +56,10 @@ export default function NewApplicationPage() {
                         <div className="flex flex-col gap-2">
                             <label className="text-[10px] font-extrabold text-on-surface/40 tracking-widest uppercase px-1">Notes</label>
                             <FormTextArea
+                                name="notes"
                                 label=""
                                 placeholder="Salary expectations, key contacts, or preparation notes..."
                                 rows={5}
-                                onChange={(val) => console.log("Notas actualizadas:", val)}
                             />
                         </div>
 

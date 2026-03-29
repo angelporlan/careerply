@@ -6,13 +6,14 @@ interface Option {
 }
 
 interface FormSelectProps {
+  name: string;
   label: string;
   options: Option[];
   defaultValue?: string;
   onChange?: (value: string) => void;
 }
 
-export default function FormSelect({ label, options, defaultValue, onChange }: FormSelectProps) {
+export default function FormSelect({ name, label, options, defaultValue, onChange }: FormSelectProps) {
   return (
     <div className="flex flex-col gap-2 w-full">
       <label className="text-[10px] font-extrabold text-on-surface/40 tracking-widest uppercase px-1">
@@ -20,6 +21,7 @@ export default function FormSelect({ label, options, defaultValue, onChange }: F
       </label>
       <div className="relative group">
         <select 
+          name={name}
           defaultValue={defaultValue}
           onChange={(e) => onChange?.(e.target.value)}
           className="
