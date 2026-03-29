@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Tonal Architecture - Colores del Manual */
+  --color-primary: #0053db;
+  --color-primary-dim: #0048c1;
+  
+  --color-surface: #faf8ff;
+  --color-surface-bright: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f2f9;
+  --color-surface-container-high: #ebe9f0;
+  
+  --color-on-surface: #113069;
+
+  /* Status Chips */
+  --color-status-sent-bg: #e0e7ff;
+  --color-status-sent-text: #3730a3;
+  --color-status-interview-bg: #dbeafe;
+  --color-status-interview-text: #1e40af;
+  --color-status-offer-bg: #f0fdf4;
+  --color-status-offer-text: #166534;
+  --color-status-rejected-bg: #fee2e2;
+  --color-status-rejected-text: #991b1b;
+
+  /* Espaciado y Bordes del Manual */
+  --radius-md: 0.75rem;
+  --radius-2xl: 1.25rem;
+  --radius-4xl: 2.5rem;
+
+  /* Tipografía */
+  --letter-spacing-tightest: -0.02em;
+  --letter-spacing-widest: 0.05em;
+  
+  /* Gradiente del Manual */
+  --background-image-primary-gradient: linear-gradient(145deg, #0053db 0%, #0048c1 100%);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-geist-sans), sans-serif; /* O tu fuente Inter */
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Regla Glassmorphism del manual */
+.glass-nav {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
 }
