@@ -8,8 +8,12 @@ import FormSelect from "@/components/applications/new/FormSelect";
 import FormTextArea from "@/components/applications/new/FormTextArea";
 import ActionButton from "@/components/ActionButton";
 import { createApplication } from "@/app/lib/actions";
+import { useSearchParams } from "next/navigation";
 
 export default function NewApplicationPage() {
+    const searchParams = useSearchParams();
+    const actionError = searchParams.get("error");
+
     return (
         <div className="p-10 max-w-[1200px] mx-auto bg-surface min-h-screen">
 
@@ -21,6 +25,12 @@ export default function NewApplicationPage() {
             <div className="grid grid-cols-12 gap-12 items-start">
                 {/* COLUMNA IZQUIERDA: Formulario */}
                 <div className="col-span-8 bg-surface-container-lowest rounded-4xl p-12 shadow-sm">
+
+                    {actionError ? (
+                        <div className="mb-6 rounded-md bg-status-rejected-bg px-4 py-3 text-sm text-status-rejected-text">
+                            {actionError}
+                        </div>
+                    ) : null}
 
 
                     <form action={createApplication} className="space-y-8">

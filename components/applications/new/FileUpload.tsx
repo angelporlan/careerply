@@ -56,6 +56,7 @@ export default function FileUpload() {
       >
         <input 
           type="file"
+          name="cv_file"
           ref={fileInputRef}
           onChange={handleFileChange}
           accept=".pdf,.docx"
