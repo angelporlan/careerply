@@ -12,8 +12,27 @@ import {
   LogOut 
 } from 'lucide-react';
 
-export default function Sidebar() {
+type SidebarProps = {
+  userName: string;
+  userEmail: string;
+};
+
+export default function Sidebar({ userName, userEmail }: SidebarProps) {
   const pathname = usePathname();
+
+  const getInitials = (name: string, email: string) => {
+    const fromName = name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? "")
+      .join("");
+
+    if (fromName) return fromName;
+
+    const emailPrefix = email.split("@")[0] ?? "";
+    return emailPrefix.slice(0, 2).toUpperCase() || "US";
+  };
 
   // Función mejorada para detectar si la ruta es activa o hija de una activa
   const isPathActive = (path: string) => {
@@ -108,11 +127,11 @@ export default function Sidebar() {
         {/* Tarjeta de Perfil */}
         <div className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-2xl shadow-sm border-none">
           <div className="w-10 h-10 rounded-xl bg-on-surface flex items-center justify-center text-surface-bright font-bold text-sm shrink-0">
-            AS
+            {getInitials(userName, userEmail)}
           </div>
           <div className="overflow-hidden">
-            <p className="text-sm font-bold text-on-surface truncate">Alex Sterling</p>
-            <p className="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest truncate">Pro Account</p>
+            <p className="text-sm font-bold text-on-surface truncate">{userName}</p>
+            <p className="text-[10px] font-bold text-on-surface/40 tracking-wider truncate">{userEmail || 'Sin email'}</p>
           </div>
         </div>
       </div>

@@ -18,10 +18,17 @@ export default async function MainLayout({
     redirect("/login");
   }
 
+  const userEmail = user.email ?? "";
+  const metadata = user.user_metadata ?? {};
+  const userName =
+    (typeof metadata.full_name === "string" && metadata.full_name.trim()) ||
+    (typeof metadata.name === "string" && metadata.name.trim()) ||
+    (userEmail ? userEmail.split("@")[0] : "Usuario");
+
   return (
     <div className="flex min-h-screen bg-surface">
       {/* Sidebar fijo: Se mantiene siempre visible al navegar */}
-      <Sidebar />
+      <Sidebar userName={userName} userEmail={userEmail} />
       
       {/* Contenido dinámico: Aquí se renderizará Dashboard o Applications */}
       <main className="flex-1 overflow-y-auto overflow-x-hidden">
