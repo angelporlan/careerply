@@ -106,3 +106,30 @@ export async function getApplications() {
 
   return applications || [];
 }
+
+export async function getApplicationById(id: string) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const { data: application, error } = await supabase
+    .from("applications")
+    .select("*")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (error) {
+    return null;
+  }
+
+  return application;
+}

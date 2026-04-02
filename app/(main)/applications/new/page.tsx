@@ -15,7 +15,7 @@ export default function NewApplicationPage() {
     const actionError = searchParams.get("error");
 
     return (
-        <div className="p-10 max-w-[1200px] mx-auto bg-surface min-h-screen">
+        <div className="p-10 max-w-300 mx-auto bg-surface min-h-screen">
 
             <div className="mb-10">
                 <h1 className="text-4xl font-extrabold text-on-surface tracking-tightest">New Application</h1>

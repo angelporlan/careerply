@@ -8,7 +8,7 @@ import { FileText, Activity, History, Plus } from "lucide-react";
 
 export default function CVLibraryPage() {
   return (
-    <div className="p-10 max-w-[1440px] mx-auto bg-surface min-h-screen">
+    <div className="p-10 max-w-360 mx-auto bg-surface min-h-screen">
           <SearchInput />
       
       {/* Header Section */}

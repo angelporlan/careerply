@@ -32,7 +32,7 @@ export default async function ApplicationsPage() {
   };
 
   return (
-    <div className="p-10 max-w-[1440px] mx-auto bg-surface min-h-screen">
+    <div className="p-10 max-w-360 mx-auto bg-surface min-h-screen">
       
       {/* 1. Buscador Superior */}
       <SearchInput />
@@ -81,6 +81,7 @@ export default async function ApplicationsPage() {
             applications.map((app: any) => (
               <ApplicationRow
                 key={app.id}
+                href={`/applications/detail/${app.id}`}
                 company={app.company || app.company_name || ""}
                 location={app.location || "Location N/A"}
                 position={app.role || app.position || app.job_title || ""}
