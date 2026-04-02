@@ -52,61 +52,20 @@ export async function createApplication(formData: FormData) {
     }
   }
 
-  const initialPayload: Record<string, FormDataEntryValue | null> = {
-    company: formData.get("company"),
-    role: formData.get("role"),
-    job_url: formData.get("job_url"),
-    cv_url: cvUrl,
-    status: formData.get("status"),
-    notes: formData.get("notes"),
-    applied_at: formData.get("date"),
+  const payload = {
+    company: String(formData.get("company") ?? "").trim(),
+    status: String(formData.get("status") ?? "sent").trim(),
+    notes: String(formData.get("notes") ?? "").trim(),
     user_id: user.id,
+    cv_url: cvUrl,
   };
 
-  const aliases: Record<string, string[]> = {
-    company: ["company_name"],
-    role: ["position", "job_title", "title"],
-    job_url: ["url", "link"],
-    applied_at: ["application_date", "date"],
-    user_id: ["owner_id", "profile_id"],
-  };
+  const { error } = await supabase.from("applications").insert([payload]);
 
-  let payload = { ...initialPayload };
-  let lastError: { message: string } | null = null;
-
-  for (let i = 0; i < 12; i += 1) {
-    const { error } = await supabase.from("applications").insert([payload]);
-
-    if (!error) {
-      revalidatePath("/applications");
-      redirect("/applications");
-    }
-
-    lastError = error;
-
-    const missingColumn = error.message.match(/Could not find the '([^']+)' column/);
-    if (!missingColumn) {
-      break;
-    }
-
-    const column = missingColumn[1];
-    const nextAlias = aliases[column]?.shift();
-
-    if (nextAlias) {
-      payload[nextAlias] = payload[column];
-    }
-
-    delete payload[column];
-
-    if (Object.keys(payload).length === 0) {
-      break;
-    }
-  }
-
-  if (lastError) {
+  if (error) {
     if (
       /row-level security|permission denied|not allowed|violates row-level security/i.test(
-        lastError.message
+        error.message
       )
     ) {
       redirectWithError(
@@ -114,6 +73,36 @@ export async function createApplication(formData: FormData) {
       );
     }
 
-    redirectWithError(`Error guardando en Supabase: ${lastError.message}`);
+    redirectWithError(`Error guardando en Supabase: ${error.message}`);
   }
+
+  revalidatePath("/applications");
+  redirect("/applications");
+}
+
+export async function getApplications() {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const { data: applications, error } = await supabase
+    .from("applications")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching applications:", error);
+    return [];
+  }
+
+  return applications || [];
 }

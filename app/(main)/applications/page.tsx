@@ -5,8 +5,32 @@ import EfficiencyCard from "@/components/applications/EfficiencyCard";
 import PromoBanner from "@/components/applications/PromoBanner";
 import { CalendarDays } from "lucide-react";
 import ActionButton from "@/components/ActionButton";
+import { getApplications } from "@/app/lib/actions";
 
-export default function ApplicationsPage() {
+const statusColors: Record<string, string> = {
+  SENT: "bg-blue-500",
+  INTERVIEW: "bg-indigo-600",
+  OFFER: "bg-green-500",
+  REJECTED: "bg-red-500",
+};
+
+export default async function ApplicationsPage() {
+  const applications = await getApplications();
+
+  const getColorForStatus = (status: string) => {
+    return statusColors[status?.toUpperCase()] || "bg-gray-500";
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="p-10 max-w-[1440px] mx-auto bg-surface min-h-screen">
       
@@ -20,7 +44,7 @@ export default function ApplicationsPage() {
             Applications
           </h1>
           <p className="text-on-surface/50 font-medium text-lg">
-            Managing 24 active recruitment processes.
+            Managing {applications.length} active recruitment processes.
           </p>
         </div>
         
@@ -53,32 +77,32 @@ export default function ApplicationsPage() {
 
         {/* Filas */}
         <div className="space-y-2">
-          <ApplicationRow 
-            company="Stellar Systems" location="Palo Alto, CA" 
-            position="Senior Product Designer" type="Design • Full-time"
-            date="Oct 24, 2023" status="OFFER" iconBg="bg-indigo-600"
-          />
-          <ApplicationRow 
-            company="Lumina AI" location="Remote" 
-            position="Frontend Lead" type="Engineering • Contract"
-            date="Oct 22, 2023" status="INTERVIEW" iconBg="bg-blue-500"
-          />
-          <ApplicationRow 
-            company="Cirrus Data" location="London, UK" 
-            position="UX Researcher" type="Design • Full-time"
-            date="Oct 20, 2023" status="SENT" iconBg="bg-teal-500"
-          />
-          <ApplicationRow 
-            company="GreenRoot" location="Austin, TX" 
-            position="Creative Director" type="Marketing • Full-time"
-            date="Oct 18, 2023" status="REJECTED" iconBg="bg-rose-500"
-          />
+          {applications.length > 0 ? (
+            applications.map((app: any) => (
+              <ApplicationRow
+                key={app.id}
+                company={app.company || app.company_name || ""}
+                location={app.location || "Location N/A"}
+                position={app.role || app.position || app.job_title || ""}
+                type={app.type || "Full-time"}
+                date={formatDate(app.created_at || app.applied_at || app.application_date || app.date)}
+                status={app.status}
+                iconBg={getColorForStatus(app.status)}
+              />
+            ))
+          ) : (
+            <div className="py-12 text-center">
+              <p className="text-on-surface/40 text-sm">
+                No applications yet. Start by creating one!
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Paginación Sencilla */}
         <div className="mt-8 flex justify-between items-center px-4">
           <p className="text-xs font-bold text-on-surface/30 uppercase tracking-widest">
-            Showing <span className="text-on-surface">1-10</span> of 24 applications
+            Showing <span className="text-on-surface">1-{applications.length}</span> of {applications.length} applications
           </p>
           <div className="flex gap-2">
             {[1, 2, 3].map(n => (
