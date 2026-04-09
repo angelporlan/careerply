@@ -133,3 +133,95 @@ export async function getApplicationById(id: string) {
 
   return application;
 }
+
+export async function uploadApplicationCv(applicationId: string, formData: FormData) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const file = formData.get("cv_file") as File | null;
+  if (!file || file.size <= 0) {
+    const params = new URLSearchParams({ error: "Selecciona un archivo valido." });
+    redirect(`/applications/detail/${applicationId}?${params.toString()}`);
+  }
+
+  const { data: application, error: applicationError } = await supabase
+    .from("applications")
+    .select("id, cv_url")
+    .eq("id", applicationId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (applicationError || !application) {
+    const params = new URLSearchParams({ error: "No se encontro la aplicacion." });
+    redirect(`/applications/detail/${applicationId}?${params.toString()}`);
+  }
+
+  if (application.cv_url) {
+    const params = new URLSearchParams({ error: "Esta aplicacion ya tiene un CV cargado." });
+    redirect(`/applications/detail/${applicationId}?${params.toString()}`);
+  }
+
+  const extension = file.name.split(".").pop() || "pdf";
+  const fileName = `${user.id}_${applicationId}_${Date.now()}.${extension}`;
+
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from("cvs")
+    .upload(fileName, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (uploadError || !uploadData) {
+    const params = new URLSearchParams({ error: "No se pudo subir el archivo a storage." });
+    redirect(`/applications/detail/${applicationId}?${params.toString()}`);
+  }
+
+  const { data: publicUrlData } = supabase.storage
+    .from("cvs")
+    .getPublicUrl(uploadData.path);
+
+  const { data: updatedApplication, error: updateError } = await supabase
+    .from("applications")
+    .update({ cv_url: publicUrlData.publicUrl })
+    .eq("id", applicationId)
+    .eq("user_id", user.id)
+    .select("id, cv_url")
+    .maybeSingle();
+
+  if (updateError || !updatedApplication?.cv_url) {
+    await supabase.storage.from("cvs").remove([uploadData.path]);
+
+    if (updateError) {
+      console.error("Error updating application cv_url:", {
+        message: updateError.message,
+        code: updateError.code,
+        details: updateError.details,
+        hint: updateError.hint,
+      });
+
+      const params = new URLSearchParams({
+        error: `No se pudo guardar el cv_url en applications: ${updateError.message}`,
+      });
+      redirect(`/applications/detail/${applicationId}?${params.toString()}`);
+    }
+
+    const params = new URLSearchParams({
+      error:
+        "No se pudo actualizar la fila de applications. Revisa la policy RLS de UPDATE (auth.uid() = user_id).",
+    });
+    redirect(`/applications/detail/${applicationId}?${params.toString()}`);
+  }
+
+  revalidatePath("/applications");
+  revalidatePath(`/applications/detail/${applicationId}`);
+  redirect(`/applications/detail/${applicationId}?success=1`);
+}
