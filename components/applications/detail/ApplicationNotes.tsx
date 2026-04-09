@@ -3,7 +3,12 @@
 import { MessageSquare } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-export default function ApplicationNotes() {
+interface ApplicationNotesProps {
+  initialNotes?: string | null;
+  lastSavedAtLabel: string;
+}
+
+export default function ApplicationNotes({ initialNotes, lastSavedAtLabel }: ApplicationNotesProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Función para ajustar la altura automáticamente, pero limitándola
@@ -33,7 +38,7 @@ export default function ApplicationNotes() {
       </div>
       
       {/* Contenedor "Hoja de Papel" con ALTURA FIJA y SCROLL */}
-      <div className="bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-on-surface/5 relative group h-[300px] flex flex-col">
+      <div className="bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-on-surface/5 relative group h-75 flex flex-col">
         <textarea 
           ref={textareaRef}
           onChange={adjustHeight}
@@ -44,13 +49,13 @@ export default function ApplicationNotes() {
             overflow-y-auto pr-2
           "
           placeholder="Start typing your interview prep or company research..."
-          defaultValue="Company values craft above all else. Mention the recent dark mode update in the interview. Focus on how I handle scaling design components for global teams."
+          defaultValue={initialNotes ?? ""}
         />
         
         {/* Footer de guardado con mejor posicionamiento y sin ocupar espacio */}
         <div className="absolute bottom-4 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <span className="text-[9px] font-bold text-on-surface/20 uppercase tracking-widest">
-            Last saved: 2 hours ago
+            Last saved: {lastSavedAtLabel}
           </span>
         </div>
       </div>
