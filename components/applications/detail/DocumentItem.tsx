@@ -3,11 +3,12 @@ import { FileText, Download } from "lucide-react";
 interface DocumentItemProps {
   name: string;
   date: string;
+  href?: string;
 }
 
-export default function DocumentItem({ name, date }: DocumentItemProps) {
-  return (
-    <div className="bg-surface-container-lowest p-4 rounded-2xl flex items-center gap-4 group hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/5">
+export default function DocumentItem({ name, date, href }: DocumentItemProps) {
+  const content = (
+    <>
       <div className="p-2 bg-status-rejected-bg/30 text-status-rejected-text rounded-lg">
         <FileText className="w-5 h-5" />
       </div>
@@ -17,9 +18,28 @@ export default function DocumentItem({ name, date }: DocumentItemProps) {
           Modified: {date}
         </p>
       </div>
-      <button className="p-2 text-on-surface/20 group-hover:text-primary transition-colors">
+      <span className="p-2 text-on-surface/20 group-hover:text-primary transition-colors">
         <Download className="w-4 h-4" />
-      </button>
+      </span>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        className="bg-surface-container-lowest p-4 rounded-2xl flex items-center gap-4 group hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/5"
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <div className="bg-surface-container-lowest p-4 rounded-2xl flex items-center gap-4 group hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/5">
+      {content}
     </div>
   );
 }
