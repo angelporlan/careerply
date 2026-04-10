@@ -5,10 +5,10 @@ import { useEffect, useRef } from "react";
 
 interface ApplicationNotesProps {
   initialNotes?: string | null;
-  lastSavedAtLabel: string;
+  lastSavedAtLabel?: string;
 }
 
-export default function ApplicationNotes({ initialNotes, lastSavedAtLabel }: ApplicationNotesProps) {
+export default function ApplicationNotes({ initialNotes, lastSavedAtLabel = "unknown" }: ApplicationNotesProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Función para ajustar la altura automáticamente, pero limitándola
