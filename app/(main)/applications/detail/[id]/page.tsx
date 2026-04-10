@@ -2,17 +2,21 @@ import ActionButton from "@/components/ActionButton";
 import TimelineItem from "@/components/applications/detail/TimelineItem";
 import ApplicationNotes from "@/components/applications/detail/ApplicationNotes";
 import DocumentItem from "@/components/applications/detail/DocumentItem";
-import { Edit3, RefreshCw, Plus, FileText } from "lucide-react";
-import { getApplicationById } from "@/app/lib/actions";
+import { Edit3, RefreshCw, FileText } from "lucide-react";
+import { getApplicationById, uploadApplicationCv } from "@/app/lib/actions";
 import { notFound } from "next/navigation";
+import CvUploadDropzone from "@/components/applications/detail/CvUploadDropzone";
 
 interface ApplicationDetailPageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string; success?: string }>;
 }
 
-export default async function ApplicationDetailPage({ params }: ApplicationDetailPageProps) {
+export default async function ApplicationDetailPage({ params, searchParams }: ApplicationDetailPageProps) {
   const { id } = await params;
+  const resolvedSearchParams = await searchParams;
   const application = await getApplicationById(id);
+  const uploadCvAction = uploadApplicationCv.bind(null, id);
 
   if (!application) {
     notFound();
@@ -44,6 +48,30 @@ export default async function ApplicationDetailPage({ params }: ApplicationDetai
         year: "numeric",
       })
     : "Unknown date";
+
+  const getRelativeTimeLabel = (dateValue?: string | null) => {
+    if (!dateValue) return "unknown";
+
+    const now = Date.now();
+    const timestamp = new Date(dateValue).getTime();
+
+    if (Number.isNaN(timestamp)) {
+      return "unknown";
+    }
+
+    const diffMinutes = Math.max(0, Math.floor((now - timestamp) / 60000));
+
+    if (diffMinutes < 1) return "just now";
+    if (diffMinutes < 60) return `${diffMinutes} min ago`;
+
+    const diffHours = Math.floor(diffMinutes / 60);
+    if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
+
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+  };
+
+  const lastSavedLabel = getRelativeTimeLabel(application.updated_at || application.created_at);
 
   return (
     <div className="p-10 max-w-360 mx-auto bg-surface min-h-screen">
@@ -92,7 +120,10 @@ export default async function ApplicationDetailPage({ params }: ApplicationDetai
         </div>
 
         <div className="col-span-4 space-y-10">
-          <ApplicationNotes />
+          <ApplicationNotes
+            initialNotes={application.notes}
+            lastSavedAtLabel={lastSavedLabel}
+          />
 
           <div className="bg-surface-container-low/30 p-8 rounded-4xl">
             <div className="flex items-center gap-3 mb-8 text-primary">
@@ -100,18 +131,27 @@ export default async function ApplicationDetailPage({ params }: ApplicationDetai
               <h3 className="text-[10px] font-extrabold uppercase tracking-widest">Documents</h3>
             </div>
 
+            {resolvedSearchParams.error ? (
+              <p className="mb-4 text-xs text-status-rejected-text bg-status-rejected-bg/40 rounded-xl px-3 py-2">
+                {resolvedSearchParams.error}
+              </p>
+            ) : null}
+
+            {resolvedSearchParams.success ? (
+              <p className="mb-4 text-xs text-status-offer-text bg-status-offer-bg/40 rounded-xl px-3 py-2">
+                CV uploaded successfully.
+              </p>
+            ) : null}
+
             <div className="space-y-3 mb-8">
               {application.cv_url ? (
-                <DocumentItem name="CV Uploaded" date={appliedLabel} />
+                <DocumentItem name="CV Uploaded" date={appliedLabel} href={application.cv_url} />
               ) : (
                 <p className="text-xs text-on-surface/40">No documents uploaded yet.</p>
               )}
             </div>
 
-            <button className="w-full border-2 border-dashed border-primary/10 rounded-2xl p-5 text-[10px] font-extrabold text-primary/40 uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-surface-container-low transition-all cursor-pointer group">
-              <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              Upload New File
-            </button>
+            {!application.cv_url ? <CvUploadDropzone uploadAction={uploadCvAction} /> : null}
           </div>
         </div>
       </div>
